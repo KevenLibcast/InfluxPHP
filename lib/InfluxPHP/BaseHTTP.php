@@ -47,6 +47,12 @@ class BaseHTTP
     protected $timePrecision = 's';
     protected $children = array();
 
+    /**
+     *
+     * @var int $timeout Timeout in seconds
+     */
+    public $timeout;
+
     const SECOND        = 's';
     const MILLISECOND   = 'm';
     const MICROSECOND   = 'u';
@@ -61,6 +67,7 @@ class BaseHTTP
         $this->port   = $c->port;
         $this->host   = $c->host;
         $this->timePrecision = $c->timePrecision;
+        $this->timeout = $c->timeout;
         $c->children[] = $this;
     }
 
@@ -71,6 +78,12 @@ class BaseHTTP
         $url .= "?" . http_build_query($args);
         $ch   = curl_init($url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_VERBOSE, true);
+
+        if (!is_null($this->timeout)) {
+            curl_setopt($ch, CURLOPT_TIMEOUT, $this->timeout);
+        }
+
         return $ch;
     }
 
@@ -79,9 +92,12 @@ class BaseHTTP
         $response = curl_exec ($ch);
         $status   = (string)curl_getinfo($ch, CURLINFO_HTTP_CODE);
         //$type     = curl_getinfo($ch, CURLINFO_CONTENT_TYPE);
+        $errorMsg = curl_error($ch);
+        $errorNo = curl_errno($ch);
         curl_close($ch);
         if ($status[0] != 2) {
-            throw new \RuntimeException($response);
+
+            throw new \RuntimeException($errorMsg, $errorNo);
         }
         return $json ? json_decode($response, true) : $response;
     }
