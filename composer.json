@@ -1,6 +1,6 @@
 {
     "name": "libcast/influx-php",
-    "replaces": "crodas/translation",
+    "replaces": "crodas/influx-php",
     "description": "Simple client for InfluxDB",
     "license": "BSD-4-Clause",
     "authors": [
