@@ -96,7 +96,7 @@ class BaseHTTP
         curl_close($ch);
         if ($status[0] != 2) {
 
-            throw new \RuntimeException($errorMsg, $errorNo);
+            throw new \RuntimeException($errorMsg.' - '.$response, $errorNo);
         }
         return $json ? json_decode($response, true) : $response;
     }
