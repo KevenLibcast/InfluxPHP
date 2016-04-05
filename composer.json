@@ -1,8 +1,8 @@
 {
     "name": "crodas/influx-php",
+    "replaces": "crodas/influx-php",
     "description": "Simple client for InfluxDB",
     "license": "BSD-4-Clause",
-    "version": "v0.1.1",
     "authors": [
         {
             "name": "César D. Rodas",
